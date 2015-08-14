@@ -1,0 +1,9 @@
+{
+	"checkmarx":{
+		"url":":",
+		"APIType":1,
+		"username":"admin@cx",
+		"password":"admin",
+		"APIversion":"0.0"
+	}
+}
