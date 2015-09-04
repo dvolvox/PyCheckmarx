@@ -18,12 +18,13 @@ import PyCheckmarx
 # Launch error to the user
 #
 def launchError(message):
-	return jsonify({"error":"%s" % e.message}), 500
+	return jsonify({"error":"%s" % message}), 500
 
 #
 # getProjectScannedDisplayData
 #
 @app.route('/APICX/getProjectScannedDisplayData/', methods=["GET"])
+@app.route('/APICX/getProjectScannedDisplayData/', defaults={"extra_path": ""}, methods=["GET"])
 @app.route('/APICX/getProjectScannedDisplayData/<int:projectID>', methods=["GET"])
 def ProjectScannedDisplayData(projectID=None):
 	try:
@@ -96,7 +97,7 @@ def AssociatedGroups():
 # Trigger Flask App
 #
 if __name__ == '__main__':
-    print ("Loading...")
+    print ("[SYS]\tLoading...")
     pyC = PyCheckmarx.PyCheckmarx()
-    print ("Loaded!")
-    app.run(debug=True, host="localhost", port=8080)
+    print ("[SYS]\tLoaded!")
+    app.run(debug=True, host="0.0.0.0", port=5000)

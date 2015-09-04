@@ -9,6 +9,8 @@
 
 # Python Dependencies
 from suds.client import Client
+from suds.sudsobject import asdict
+
 import json
 
 class PyCheckmarx(object):
@@ -24,8 +26,6 @@ class PyCheckmarx(object):
 	def __init__(self):
 		# Get Configuration
 		self.getConfig()
-		print self.USERNAME
-		print self.PASSWORD
 		# Open Connection With Checkmarx
 		self.Initclient = self.openConnection()
 		# Get the Service URL
@@ -121,22 +121,25 @@ class PyCheckmarx(object):
 	#
 	# Get data from the Projects
 	#
-	def getProjectScannedDisplayData(self):
-		tmp = self.client.service.GetProjectScannedDisplayData(self.sessionId).ProjectScannedList[0]
-		
+	def getProjectScannedDisplayData(self, filterOn=False):
+		tmp = self.client.service.GetProjectScannedDisplayData(self.sessionId)
+
 		if not tmp.IsSuccesfull:
 			raise Exception("Unable to get data from the server.")
 
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+		if not filterOn:
+			return self.convertToJson(tmp)
+		else:
+			return tmp.ProjectScannedList[0]
 
 	#
 	# Get Project Display Data
 	# 
-	def getProjectsDisplayData(self):
-		tmp = self.client.service.GetProjectsDisplayData(self.SessionId).projectList[0]
+	def getProjectsDisplayData(self, filterOn=False):
+		tmp = self.client.service.GetProjectsDisplayData(self.sessionId)
 
 		if not tmp.IsSuccesfull:
 			raise Exception("Unable to get data from the server.")
@@ -144,21 +147,27 @@ class PyCheckmarx(object):
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+		if not filterOn:
+			return self.convertToJson(tmp)
+		else:
+			return tmp.projectList[0]
 
 	#
 	# Get Scan Info For All Projects
 	#
-	def getScanInfoForAllProjects(self):
-		tmp = self.client.service.GetScansDisplayDataForAllProjects(self.sessionId).ProjectScannedList[0]
-
+	def getScanInfoForAllProjects(self, filterOn=False):
+		tmp = self.client.service.GetScansDisplayDataForAllProjects(self.sessionId)
 		if not tmp.IsSuccesfull:
 			raise Exception("Unable to get data from the server.")
 
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+
+		if not filterOn:
+			return self.convertToJson(tmp)
+		else:
+			return tmp
 
 	#
 	# Get Preset List
@@ -172,7 +181,7 @@ class PyCheckmarx(object):
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+		return self.convertToJson(tmp)
 
 	#
 	# Get Configuration List
@@ -186,7 +195,7 @@ class PyCheckmarx(object):
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+		return self.convertToJson(tmp)
 
 	#
 	# Get Associated Groups List 
@@ -200,16 +209,16 @@ class PyCheckmarx(object):
 		if self.DEBUG:
 			print dir(tmp)
 
-		return tmp
+		return self.convertToJson(tmp)
 
 	#
 	# Filter For [getProjectScannedDisplayData]
 	# 
 	def filterProjectScannedDisplayData(self, projectID):
-		tmpProjects = getProjectScannedDisplayData()
+		tmpProjects = self.getProjectScannedDisplayData(True)
 		for project in tmpProjects:
-			if project.projectID == projectID:
-				return project
+			if project.ProjectID == projectID:
+				return self.convertToJson(project)
 
 		raise Exception("Could not find ProjectID: %s " % projectID)
 
@@ -217,10 +226,10 @@ class PyCheckmarx(object):
 	# Filter for [getProjectsDisplayData]
 	#
 	def filterProjectsDisplayData(self,projectID):
-		tmpProjects = getProjectsDisplayData()
+		tmpProjects = self.getProjectsDisplayData(True)
 		for project in tmpProjects:
 			if project.projectID == projectID:
-				return project
+				return self.convertToJson(project)
 
 		raise Exception("Could not find ProjectID: %s " % projectID)
 	
@@ -228,9 +237,50 @@ class PyCheckmarx(object):
 	# Filter for [getScanInfoForAllProjects]
 	#
 	def filterScanInfoForAllProjects(self,projectID):
-		tmpProjects = getScanInfoForAllProjects()
+		tmpProjects = self.getScanInfoForAllProjects(True).ScanList[0]
 		for project in tmpProjects:
-			if project.projectID == projectID:
-				return project
+			if project.ProjectId == projectID:
+				return self.convertToJson(project)
 
 		raise Exception("Could not find ProjectID: %s " % projectID)
+
+	#
+	# Convert Suds object into serializable format.
+	#
+	def recursive_asdict(self,d):
+		out = {}
+		for k, v in asdict(d).iteritems():
+			if hasattr(v, '__keylist__'):
+				out[k] = self.recursive_asdict(v)
+			elif isinstance(v, list):
+				out[k] = []
+				for item in v:
+					if hasattr(item, '__keylist__'):
+						out[k].append(self.recursive_asdict(item))
+					else:
+						out[k].append(item)
+			else:
+				out[k] = v
+		return out
+
+
+	#
+	# Return Subs Object into Serializable format Handler
+	#
+	def convertToJson(self, data):
+		try:
+			tmp = self.recursive_asdict(data)
+			return json.dumps(tmp)
+		except Exception as e:
+			raise Exception("Unable to convert to JSON: %s" % e.message)
+
+
+##########################################
+#
+# Testing AREA
+#
+##########################################
+
+#tmp = PyCheckmarx()
+#print tmp.filterProjectScannedDisplayData(20004)
+
