@@ -1,0 +1,184 @@
+Service ( CxSDKWebService ) tns="http://Checkmarx.com/v7"
+   Prefixes (1)
+      ns0 = "http://Checkmarx.com/v7"
+   Ports (2):
+      (CxSDKWebServiceSoap)
+         Methods (21):
+            CancelScan(xs:string sessionID, xs:string RunId, )
+            CreateScanReport(xs:string sessionID, CxWSReportRequest reportRequest, )
+            DeleteProjects(xs:string sessionID, ArrayOfLong projectIDs, )
+            DeleteScans(xs:string sessionID, ArrayOfLong scanIDs, )
+            GetAssociatedGroupsList(xs:string SessionID, )
+            GetConfigurationSetList(xs:string SessionID, )
+            GetPresetList(xs:string SessionID, )
+            GetProjectConfiguration(xs:string sessionID, xs:long projectID, )
+            GetProjectScannedDisplayData(xs:string sessionID, )
+            GetProjectsDisplayData(xs:string sessionID, )
+            GetScanReport(xs:string SessionID, xs:long ReportID, )
+            GetScanReportStatus(xs:string SessionID, xs:long ReportID, )
+            GetScanSummary(xs:string SessionID, xs:long ScanID, )
+            GetScansDisplayDataForAllProjects(xs:string sessionID, )
+            GetStatusOfSingleScan(xs:string sessionID, xs:string runId, )
+            Login(Credentials applicationCredentials, xs:int lcid, )
+            Scan(xs:string sessionId, CliScanArgs args, )
+            ScanWithScheduling(xs:string sessionId, CliScanArgs args, xs:string schedulingData, )
+            ScanWithSchedulingWithCron(xs:string sessionId, CliScanArgs args, xs:string cronString, xs:long utcEpochStartTime, xs:long utcEpochEndTime, )
+            UpdateProjectIncrementalConfiguration(xs:string sessionID, xs:long projectID, ProjectConfiguration projectConfiguration, )
+            UpdateScanComment(xs:string sessionID, xs:long ScanID, xs:string Comment, )
+         Types (66):
+            ArrayOfConfigurationSet
+            ArrayOfCxWSIssueTrackingParam
+            ArrayOfCxWSQueryLanguageState
+            ArrayOfDayOfWeek
+            ArrayOfGroup
+            ArrayOfLong
+            ArrayOfPreset
+            ArrayOfProjectDisplayData
+            ArrayOfProjectScannedDisplayData
+            ArrayOfScanAction
+            ArrayOfScanDisplayData
+            ArrayOfScanPath
+            ArrayOfString
+            CliScanArgs
+            ConfigurationSet
+            Credentials
+            CurrentStatusEnum
+            CxClientType
+            CxDateTime
+            CxWSBasicRepsonse
+            CxWSCreateReportResponse
+            CxWSIssueTrackingParam
+            CxWSProjectIssueTrackingSettings
+            CxWSQueryLanguageState
+            CxWSReportRequest
+            CxWSReportStatusResponse
+            CxWSReportType
+            CxWSResponseConfigSetList
+            CxWSResponseGroupList
+            CxWSResponseLoginData
+            CxWSResponsePresetList
+            CxWSResponseProjectConfig
+            CxWSResponseProjectScannedDisplayData
+            CxWSResponseProjectsDisplayData
+            CxWSResponseRunID
+            CxWSResponseScanResults
+            CxWSResponseScanStatus
+            CxWSResponseScanSummary
+            CxWSResponseScansDisplayData
+            CxWSResponseSessionID
+            DayOfWeek
+            GitLsRemoteViewType
+            Group
+            GroupType
+            LocalCodeContainer
+            Preset
+            ProjectConfiguration
+            ProjectDisplayData
+            ProjectScannedDisplayData
+            ProjectSettings
+            RepositoryType
+            ScanAction
+            ScanActionSettings
+            ScanActionType
+            ScanDisplayData
+            ScanEventType
+            ScanPath
+            ScanType
+            ScheduleSettings
+            ScheduleType
+            SourceCodeSettings
+            SourceControlProtocolType
+            SourceControlSettings
+            SourceFilterPatterns
+            SourceLocationType
+            UserPermission
+      (CxSDKWebServiceSoap12)
+         Methods (21):
+            CancelScan(xs:string sessionID, xs:string RunId, )
+            CreateScanReport(xs:string sessionID, CxWSReportRequest reportRequest, )
+            DeleteProjects(xs:string sessionID, ArrayOfLong projectIDs, )
+            DeleteScans(xs:string sessionID, ArrayOfLong scanIDs, )
+            GetAssociatedGroupsList(xs:string SessionID, )
+            GetConfigurationSetList(xs:string SessionID, )
+            GetPresetList(xs:string SessionID, )
+            GetProjectConfiguration(xs:string sessionID, xs:long projectID, )
+            GetProjectScannedDisplayData(xs:string sessionID, )
+            GetProjectsDisplayData(xs:string sessionID, )
+            GetScanReport(xs:string SessionID, xs:long ReportID, )
+            GetScanReportStatus(xs:string SessionID, xs:long ReportID, )
+            GetScanSummary(xs:string SessionID, xs:long ScanID, )
+            GetScansDisplayDataForAllProjects(xs:string sessionID, )
+            GetStatusOfSingleScan(xs:string sessionID, xs:string runId, )
+            Login(Credentials applicationCredentials, xs:int lcid, )
+            Scan(xs:string sessionId, CliScanArgs args, )
+            ScanWithScheduling(xs:string sessionId, CliScanArgs args, xs:string schedulingData, )
+            ScanWithSchedulingWithCron(xs:string sessionId, CliScanArgs args, xs:string cronString, xs:long utcEpochStartTime, xs:long utcEpochEndTime, )
+            UpdateProjectIncrementalConfiguration(xs:string sessionID, xs:long projectID, ProjectConfiguration projectConfiguration, )
+            UpdateScanComment(xs:string sessionID, xs:long ScanID, xs:string Comment, )
+         Types (66):
+            ArrayOfConfigurationSet
+            ArrayOfCxWSIssueTrackingParam
+            ArrayOfCxWSQueryLanguageState
+            ArrayOfDayOfWeek
+            ArrayOfGroup
+            ArrayOfLong
+            ArrayOfPreset
+            ArrayOfProjectDisplayData
+            ArrayOfProjectScannedDisplayData
+            ArrayOfScanAction
+            ArrayOfScanDisplayData
+            ArrayOfScanPath
+            ArrayOfString
+            CliScanArgs
+            ConfigurationSet
+            Credentials
+            CurrentStatusEnum
+            CxClientType
+            CxDateTime
+            CxWSBasicRepsonse
+            CxWSCreateReportResponse
+            CxWSIssueTrackingParam
+            CxWSProjectIssueTrackingSettings
+            CxWSQueryLanguageState
+            CxWSReportRequest
+            CxWSReportStatusResponse
+            CxWSReportType
+            CxWSResponseConfigSetList
+            CxWSResponseGroupList
+            CxWSResponseLoginData
+            CxWSResponsePresetList
+            CxWSResponseProjectConfig
+            CxWSResponseProjectScannedDisplayData
+            CxWSResponseProjectsDisplayData
+            CxWSResponseRunID
+            CxWSResponseScanResults
+            CxWSResponseScanStatus
+            CxWSResponseScanSummary
+            CxWSResponseScansDisplayData
+            CxWSResponseSessionID
+            DayOfWeek
+            GitLsRemoteViewType
+            Group
+            GroupType
+            LocalCodeContainer
+            Preset
+            ProjectConfiguration
+            ProjectDisplayData
+            ProjectScannedDisplayData
+            ProjectSettings
+            RepositoryType
+            ScanAction
+            ScanActionSettings
+            ScanActionType
+            ScanDisplayData
+            ScanEventType
+            ScanPath
+            ScanType
+            ScheduleSettings
+            ScheduleType
+            SourceCodeSettings
+            SourceControlProtocolType
+            SourceControlSettings
+            SourceFilterPatterns
+            SourceLocationType
+            UserPermission
