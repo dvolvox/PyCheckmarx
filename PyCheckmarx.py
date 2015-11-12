@@ -10,8 +10,10 @@
 # Python Dependencies
 from suds.client import Client
 from suds.sudsobject import asdict
-
+import base64
+import re
 import json
+import time
 
 class PyCheckmarx(object):
 
@@ -19,6 +21,8 @@ class PyCheckmarx(object):
 	DEBUG = False
 	configPath = "etc/"
 	errorLog = []
+	ttlReport = 6
+	timeWaitReport = 3  
 
 	#
 	# Init Function
@@ -245,6 +249,72 @@ class PyCheckmarx(object):
 		raise Exception("Could not find ProjectID: %s " % projectID)
 
 	#
+	# Get Suppressed Issues
+	#
+	def getSupressedIssues(self, scanID):
+		CxWSReportType = self.client.factory.create("CxWSReportType")
+		CxReportRequest = self.client.factory.create("CxWSReportRequest")
+		CxReportRequest.ScanID = scanID
+		CxReportRequest.Type = CxWSReportType.XML
+		createReportResponse = self.client.service.CreateScanReport(self.sessionId, CxReportRequest)
+		if createReportResponse.IsSuccesfull:
+
+			if self.DEBUG:
+				print createReportResponse
+				print "Success. Creating Get Scan Report Status"
+
+			inc = 0
+			while inc < self.ttlReport:
+				inc += 1
+				reportStatusResponse = self.client.service.GetScanReportStatus(self.sessionId, createReportResponse.ID)
+				if reportStatusResponse.IsSuccesfull and  reportStatusResponse.IsReady:
+					break
+
+				if self.DEBUG:
+					print "fail"
+				time.sleep(self.timeWaitReport)
+
+			if self.DEBUG:
+				print "Sucess. Creating Get Scan Report"
+			responseScanResults = self.client.service.GetScanReport(self.sessionId, createReportResponse.ID )
+
+			if responseScanResults.IsSuccesfull and responseScanResults.ScanResults:
+
+				XMLData = base64.b64decode(responseScanResults.ScanResults)
+
+				issues = re.findall('FalsePositive="([a-zA-Z]+)" Severity="([a-zA-Z]+)"', XMLData)
+				
+				if self.DEBUG:
+					print responseScanResults
+					print issues
+
+				mediumSupressIssues = 0
+				lowSupressIssues = 0
+				highSupressIssues = 0
+				otherSupressIssues = 0
+
+				for a,b in issues:
+					if a == "True":
+						if b == "Medium":
+							mediumSupressIssues += 1
+						elif b == "High":
+							highSupressIssues += 1
+						elif b == "Low":
+							lowSupressIssues += 1
+						else:
+							otherSupressIssues += 1
+				if self.DEBUG:
+					print highSupressIssues
+					print mediumSupressIssues
+					print lowSupressIssues
+				return {"highSupressIssues": highSupressIssues, "mediumSupressIssues": mediumSupressIssues, "lowSupressIssues": lowSupressIssues}
+			else:
+				raise Exception("Unable to Get Report")
+
+		else:
+			raise Exception("Unable to get Supressed")      
+
+	#
 	# Convert Suds object into serializable format.
 	#
 	def recursive_asdict(self,d):
@@ -281,6 +351,7 @@ class PyCheckmarx(object):
 #
 ##########################################
 
-#tmp = PyCheckmarx()
+tmp = PyCheckmarx()
 #print tmp.filterProjectScannedDisplayData(20004)
+print tmp.getSupressedIssues("1000004")
 
