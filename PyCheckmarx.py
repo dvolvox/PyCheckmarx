@@ -351,7 +351,7 @@ class PyCheckmarx(object):
 #
 ##########################################
 
-tmp = PyCheckmarx()
+#tmp = PyCheckmarx()
 #print tmp.filterProjectScannedDisplayData(20004)
-print tmp.getSupressedIssues("1000004")
+#print tmp.getSupressedIssues("1000004")
 
