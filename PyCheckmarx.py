@@ -1,4 +1,3 @@
-#!usr/bin/python
 
 ###############################
 # > Author: Duarte Monteiro
@@ -10,6 +9,7 @@
 # Python Dependencies
 from suds.client import Client
 from suds.sudsobject import asdict
+from suds.cache import NoCache
 import base64
 import re
 import json
@@ -96,7 +96,7 @@ class PyCheckmarx(object):
 	#
 	def getSessionId(self,client, serviceUrl): 
 		try:
-			clientSDK = Client(serviceUrl + "?wsdl")
+			clientSDK = Client(serviceUrl + "?wsdl", cache=NoCache())
 
 			CxLogin = clientSDK.factory.create("Credentials")
 			CxLogin.User = self.USERNAME
